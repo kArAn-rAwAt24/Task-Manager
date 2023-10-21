@@ -18,8 +18,11 @@ app.use(logger);
 app.use(cors(corsOption));
 app.use(express.json());
 app.use(cookieParse());
+
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/', require('./routes/root'));
+app.use('/users',require('./routes/userRoutes.js'))
 
 app.all('*', (req, res) => {
   res.status(404);
@@ -43,7 +46,7 @@ mongoose.connection.once('open', () => {
   });
 });
 
-mongoose.connection.on('error', () => {
+mongoose.connection.on('error', (err) => {
   console.log(err);
   logEvents(
     `${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`,
